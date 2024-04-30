@@ -1,8 +1,23 @@
+variable "repo_name" {
+  type        = string
+  description = "The name of the repository."
+}
+
+variable "env_name" {
+  type        = string
+  description = "The deployment environment (e.g., stg, prd)."
+}
+
+locals {
+  repo_name   = var.repo_name
+  env_name   = var.env_name
+}
+
 module "terraform_state_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket = "tf-state-${local.repo_name}-root"
+  bucket = "tf-state-${local.repo_name}-${local.env_name}"
 
   attach_deny_insecure_transport_policy = true
   attach_require_latest_tls_policy      = true
