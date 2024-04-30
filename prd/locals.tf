@@ -22,3 +22,7 @@ locals {
 locals {
   image_uri = var.image_uri
 }
+
+locals {
+  image_tag = var.image_tag
+}

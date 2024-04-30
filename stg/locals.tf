@@ -10,3 +10,7 @@ locals {
 locals {
   env_name = var.env_name
 }
+
+locals {
+  image_tag = var.image_tag
+}

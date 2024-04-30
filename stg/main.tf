@@ -121,7 +121,7 @@ resource "aws_apprunner_service" "apprunner" {
           HOSTNAME = "0.0.0.0"
         }
       }
-      image_identifier      = "${aws_ecr_repository.ryota_blog.repository_url}:latest"
+      image_identifier      = "${aws_ecr_repository.ryota_blog.repository_url}:${local.image_tag}"
       image_repository_type = "ECR"
     }
   }

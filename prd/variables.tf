@@ -27,3 +27,8 @@ variable "image_uri" {
   type = string
   description = "value of the image uri"
 }
+
+variable "image_tag" {
+  type    = string
+  default = "latest" 
+}

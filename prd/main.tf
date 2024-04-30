@@ -26,7 +26,7 @@ resource "aws_apprunner_service" "apprunner" {
           HOSTNAME = "0.0.0.0"
         }
       }
-      image_identifier      = "${local.image_uri}:latest"
+      image_identifier      = "${local.image_uri}:${local.image_tag}"
       image_repository_type = "ECR"
     }
   }

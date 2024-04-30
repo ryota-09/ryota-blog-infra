@@ -17,3 +17,8 @@ variable "env_name" {
   type        = string
   description = "The deployment environment (e.g., stg, prd)."
 }
+
+variable "image_tag" {
+  type    = string
+  default = "latest" 
+}
