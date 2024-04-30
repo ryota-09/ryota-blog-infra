@@ -1,0 +1,45 @@
+terraform {
+  backend "s3" {
+    bucket = "tf-state-ryota-blog-prd"
+    key    = "terraform.tfstate"
+    region = "ap-northeast-1"
+  }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.9.0"
+    }
+  }
+  required_version = "~> 1.0"
+}
+
+resource "aws_apprunner_service" "apprunner" {
+  service_name = "${local.repo_name}-${local.env_name}"
+  source_configuration {
+    authentication_configuration {
+      access_role_arn = local.apprunner_role_arn
+    }
+    image_repository {
+      image_configuration {
+        port = 3000
+        runtime_environment_variables = {
+          HOSTNAME = "0.0.0.0"
+        }
+      }
+      image_identifier      = "${local.image_uri}:latest"
+      image_repository_type = "ECR"
+    }
+  }
+
+  network_configuration {}
+
+  auto_scaling_configuration_arn = aws_apprunner_auto_scaling_configuration_version.apprunner.arn
+}
+
+resource "aws_apprunner_auto_scaling_configuration_version" "apprunner" {
+  auto_scaling_configuration_name = local.repo_name
+
+  max_concurrency = 50
+  max_size        = 3
+  min_size        = 1
+}

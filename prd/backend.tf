@@ -2,7 +2,7 @@ module "terraform_state_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket = "tf-state-${local.repo_name}-root"
+  bucket = "tf-state-${local.repo_name}-${local.env_name}"
 
   attach_deny_insecure_transport_policy = true
   attach_require_latest_tls_policy      = true
