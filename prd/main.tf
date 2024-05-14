@@ -14,19 +14,21 @@ terraform {
 }
 
 resource "aws_apprunner_service" "apprunner" {
-  service_name = "${local.repo_name}-${local.env_name}"
+  service_name = "${var.repo_name}-${var.env_name}"
   source_configuration {
     authentication_configuration {
-      access_role_arn = local.apprunner_role_arn
+      access_role_arn = var.apprunner_role_arn
     }
     image_repository {
       image_configuration {
         port = 3000
         runtime_environment_variables = {
           HOSTNAME = "0.0.0.0"
+          MICROCMS_SERVICE_DOMAIN = var.microcms_service_domain
+          MICROCMS_API_KEY        = var.microcms_api_key
         }
       }
-      image_identifier      = "${local.image_uri}:${local.image_tag}"
+      image_identifier      = "${var.image_uri}:${var.image_tag}"
       image_repository_type = "ECR"
     }
   }
@@ -37,7 +39,7 @@ resource "aws_apprunner_service" "apprunner" {
 }
 
 resource "aws_apprunner_auto_scaling_configuration_version" "apprunner" {
-  auto_scaling_configuration_name = local.repo_name
+  auto_scaling_configuration_name = var.repo_name
 
   max_concurrency = 50
   max_size        = 3

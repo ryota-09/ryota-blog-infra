@@ -20,5 +20,20 @@ variable "env_name" {
 
 variable "image_tag" {
   type    = string
-  default = "latest" 
+  default = "latest"
+}
+
+variable "base_url" {
+  type        = string
+  description = "The base URL of the service."
+}
+
+variable "microcms_service_domain" {
+  type        = string
+  description = "microcms service domain."
+}
+
+variable "microcms_api_key" {
+  type        = string
+  description = "microcms api key."
 }

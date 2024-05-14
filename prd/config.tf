@@ -1,9 +1,9 @@
 provider "aws" {
-  region  = local.aws_region
+  region  = var.aws_region
   profile = "terraform"
   default_tags {
     tags = {
-      Terraform   = local.repo_name
+      Terraform   = var.repo_name
       Environment = terraform.workspace
     }
   }

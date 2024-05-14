@@ -14,3 +14,15 @@ locals {
 locals {
   image_tag = var.image_tag
 }
+
+locals {
+  base_url = var.base_url
+}
+
+locals {
+  microcms_service_domain = var.microcms_service_domain
+}
+
+locals {
+  microcms_api_key = var.microcms_api_key
+}

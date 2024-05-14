@@ -118,13 +118,23 @@ resource "aws_apprunner_service" "apprunner" {
       image_configuration {
         port = 3000
         runtime_environment_variables = {
-          HOSTNAME = "0.0.0.0"
+          HOSTNAME                = "0.0.0.0"
+          BASE_URL                = local.base_url
+          MICROCMS_SERVICE_DOMAIN = local.microcms_service_domain
+          MICROCMS_API_KEY        = local.microcms_api_key
         }
       }
       image_identifier      = "${aws_ecr_repository.ryota_blog.repository_url}:${local.image_tag}"
       image_repository_type = "ECR"
     }
   }
+
+  # runtime_environment {
+  #   variables = {
+  #     MICROCMS_SERVICE_DOMAIN = local.microcms_service_domain
+  #     MICROCMS_API_KEY        = local.microcms_api_key
+  #   }
+  # }
 
   network_configuration {}
 

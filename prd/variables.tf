@@ -32,3 +32,13 @@ variable "image_tag" {
   type    = string
   default = "latest" 
 }
+
+variable "microcms_service_domain" {
+  type        = string
+  description = "microcms service domain."
+}
+
+variable "microcms_api_key" {
+  type        = string
+  description = "microcms api key."
+}
