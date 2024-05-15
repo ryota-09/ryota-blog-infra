@@ -119,7 +119,7 @@ resource "aws_apprunner_service" "apprunner" {
         port = 3000
         runtime_environment_variables = {
           HOSTNAME                = "0.0.0.0"
-          BASE_URL                = local.base_url
+          NEXT_PUBLIC_BASE_URL                = local.base_url
           MICROCMS_SERVICE_DOMAIN = local.microcms_service_domain
           MICROCMS_API_KEY        = local.microcms_api_key
         }
