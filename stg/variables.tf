@@ -37,3 +37,8 @@ variable "microcms_api_key" {
   type        = string
   description = "microcms api key."
 }
+
+variable "domain_name" {
+  type        = string
+  description = "The domain name of the service."
+}

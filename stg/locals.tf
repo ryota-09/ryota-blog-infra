@@ -26,3 +26,7 @@ locals {
 locals {
   microcms_api_key = var.microcms_api_key
 }
+
+locals {
+  domain_name = var.domain_name
+}
