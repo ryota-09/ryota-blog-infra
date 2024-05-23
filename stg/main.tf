@@ -119,7 +119,7 @@ resource "aws_apprunner_service" "apprunner" {
         port = 3000
         runtime_environment_variables = {
           HOSTNAME                = "0.0.0.0"
-          NEXT_PUBLIC_BASE_URL                = local.base_url
+          NEXT_PUBLIC_BASE_URL    = local.base_url
           MICROCMS_SERVICE_DOMAIN = local.microcms_service_domain
           MICROCMS_API_KEY        = local.microcms_api_key
         }
@@ -128,13 +128,6 @@ resource "aws_apprunner_service" "apprunner" {
       image_repository_type = "ECR"
     }
   }
-
-  # runtime_environment {
-  #   variables = {
-  #     MICROCMS_SERVICE_DOMAIN = local.microcms_service_domain
-  #     MICROCMS_API_KEY        = local.microcms_api_key
-  #   }
-  # }
 
   network_configuration {}
 
@@ -147,4 +140,101 @@ resource "aws_apprunner_auto_scaling_configuration_version" "apprunner" {
   max_concurrency = 50
   max_size        = 3
   min_size        = 1
+}
+
+resource "aws_route53_zone" "main" {
+  name = local.domain_name
+}
+
+resource "aws_acm_certificate" "cert" {
+  domain_name       = local.domain_name
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    Terraform   = local.repo_name
+    Environment = terraform.workspace
+  }
+}
+
+resource "aws_route53_record" "record" {
+  for_each = {
+    # dvo : domain validation option
+    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      type   = dvo.resource_record_type
+      record = dvo.resource_record_value
+    }
+  }
+  allow_overwrite = true
+  name            = each.value.name
+  zone_id         = aws_route53_zone.main.zone_id
+  type            = each.value.type
+  ttl             = 60
+
+  records = [each.value.record]
+
+  depends_on = [aws_acm_certificate.cert, aws_route53_zone.main]
+}
+
+# 追加のCNAMEレコード設定（証明書検証用）
+resource "aws_route53_record" "cname_validation_a" {
+  name    = local.cert_validation_record_name_a
+  zone_id = aws_route53_zone.main.zone_id
+  type    = "CNAME"
+  ttl     = 300
+  records = [local.cert_validation_record_value_a]
+
+  depends_on = [aws_apprunner_service.apprunner]
+}
+resource "aws_route53_record" "cname_validation_b" {
+  name    = local.cert_validation_record_name_b
+  zone_id = aws_route53_zone.main.zone_id
+  type    = "CNAME"
+  ttl     = 300
+  records = [local.cert_validation_record_value_b]
+
+  depends_on = [aws_apprunner_service.apprunner]
+}
+resource "aws_route53_record" "cname_validation_c" {
+  name    = local.cert_validation_record_name_c
+  zone_id = aws_route53_zone.main.zone_id
+  type    = "CNAME"
+  ttl     = 300
+  records = [local.cert_validation_record_value_c]
+
+  depends_on = [aws_apprunner_service.apprunner]
+}
+
+resource "aws_route53_record" "dns_a_record" {
+  name    = local.dns_record_name
+  zone_id = aws_route53_zone.main.zone_id
+  type    = "A"
+
+  alias {
+    name                   = local.dns_record_value
+    # NOTE: 参照 https://docs.aws.amazon.com/general/latest/gr/apprunner.html
+    zone_id                = "Z08491812XW6IPYLR6CCA"
+    evaluate_target_health = false
+  }
+
+  depends_on = [aws_apprunner_service.apprunner]
+}
+
+
+
+resource "aws_acm_certificate_validation" "cert_validation" {
+  certificate_arn = aws_acm_certificate.cert.arn
+
+  validation_record_fqdns = flatten([values(aws_route53_record.record)[*].fqdn])
+
+  depends_on = [aws_route53_record.record, aws_acm_certificate.cert]
+}
+
+resource "aws_apprunner_custom_domain_association" "apprunner_custom_domain" {
+  service_arn = aws_apprunner_service.apprunner.arn
+  domain_name = aws_acm_certificate.cert.domain_name
 }

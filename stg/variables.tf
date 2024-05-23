@@ -42,3 +42,43 @@ variable "domain_name" {
   type        = string
   description = "The domain name of the service."
 }
+
+variable "cert_validation_record_name_a" {
+  type        = string
+  description = "The name of the DNS record for certificate validation."
+}
+
+variable "cert_validation_record_value_a" {
+  type        = string
+  description = "The value of the DNS record for certificate validation."
+}
+
+variable "cert_validation_record_name_b" {
+  type        = string
+  description = "The name of the DNS record for certificate validation."
+}
+
+variable "cert_validation_record_value_b" {
+  type        = string
+  description = "The value of the DNS record for certificate validation."
+}
+
+variable "cert_validation_record_name_c" {
+  type        = string
+  description = "The name of the DNS record for certificate validation."
+}
+
+variable "cert_validation_record_value_c" {
+  type        = string
+  description = "The value of the DNS record for certificate validation."
+}
+
+variable "dns_record_name" {
+  type        = string
+  description = "The name of the DNS record."
+}
+
+variable "dns_record_value" {
+  type        = string
+  description = "The value of the DNS record."
+}

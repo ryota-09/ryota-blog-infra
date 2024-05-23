@@ -30,3 +30,35 @@ locals {
 locals {
   domain_name = var.domain_name
 }
+
+locals {
+  cert_validation_record_name_a = var.cert_validation_record_name_a
+}
+
+locals {
+  cert_validation_record_value_a = var.cert_validation_record_value_a
+}
+
+locals {
+  cert_validation_record_name_b = var.cert_validation_record_name_b
+}
+
+locals {
+  cert_validation_record_value_b = var.cert_validation_record_value_b
+}
+
+locals {
+  cert_validation_record_name_c = var.cert_validation_record_name_c
+}
+
+locals {
+  cert_validation_record_value_c = var.cert_validation_record_value_c
+}
+
+locals {
+  dns_record_name = var.dns_record_name
+}
+
+locals {
+  dns_record_value = var.dns_record_value
+}
