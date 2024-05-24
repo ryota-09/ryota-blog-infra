@@ -215,7 +215,7 @@ resource "aws_route53_record" "dns_a_record" {
   type    = "A"
 
   alias {
-    name                   = local.dns_record_value
+    name = local.dns_record_value
     # NOTE: 参照 https://docs.aws.amazon.com/general/latest/gr/apprunner.html
     zone_id                = "Z08491812XW6IPYLR6CCA"
     evaluate_target_health = false
@@ -237,4 +237,45 @@ resource "aws_acm_certificate_validation" "cert_validation" {
 resource "aws_apprunner_custom_domain_association" "apprunner_custom_domain" {
   service_arn = aws_apprunner_service.apprunner.arn
   domain_name = aws_acm_certificate.cert.domain_name
+}
+
+resource "aws_wafv2_web_acl" "frontend_acl" {
+  name  = "frontend-acl-${local.env_name}"
+  scope = "REGIONAL"
+
+  default_action {
+    allow {}
+  }
+
+  rule {
+    name     = "AWSManagedRulesCommonRuleSet"
+    priority = 1
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "waf-aws-managed-rules-common-rule-set"
+      sampled_requests_enabled   = true
+    }
+
+    # NOTE: invaliderror を防ぐため
+    override_action {
+      none {}
+    }
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "frontend-waf-${local.env_name}"
+    sampled_requests_enabled   = true
+  }
+}
+
+resource "aws_wafv2_web_acl_association" "frontend_acl_association" {
+  resource_arn = aws_apprunner_service.apprunner.arn
+  web_acl_arn  = aws_wafv2_web_acl.frontend_acl.arn
 }
