@@ -62,3 +62,11 @@ locals {
 locals {
   dns_record_value = var.dns_record_value
 }
+
+locals {
+  slack_channel_id = var.slack_channel_id
+}
+
+locals {
+  slack_workspace_id = var.slack_workspace_id
+}
