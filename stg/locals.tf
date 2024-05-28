@@ -70,3 +70,11 @@ locals {
 locals {
   slack_workspace_id = var.slack_workspace_id
 }
+
+locals {
+  gtm_id = var.gtm_id
+}
+
+locals {
+  ga_id = var.ga_id
+}

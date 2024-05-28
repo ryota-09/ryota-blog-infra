@@ -92,3 +92,13 @@ variable "slack_workspace_id" {
   type        = string
   description = "The ID of the Slack workspace."
 }
+
+variable "gtm_id" {
+  type        = string
+  description = "Google Tag Manager ID."
+}
+
+variable "ga_id" {
+  type        = string
+  description = "Google Analytics ID."
+}

@@ -122,6 +122,8 @@ resource "aws_apprunner_service" "apprunner" {
           NEXT_PUBLIC_BASE_URL    = local.base_url
           MICROCMS_SERVICE_DOMAIN = local.microcms_service_domain
           MICROCMS_API_KEY        = local.microcms_api_key
+          NEXT_PUBLIC_GTM_ID      = local.gtm_id
+          NEXT_PUBLIC_GA_ID       = local.ga_id
         }
       }
       image_identifier      = "${aws_ecr_repository.ryota_blog.repository_url}:${local.image_tag}"
