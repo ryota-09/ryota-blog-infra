@@ -18,6 +18,11 @@ variable "env_name" {
   description = "The deployment environment (e.g., stg, prd)."
 }
 
+variable "base_url" {
+  type        = string
+  description = "The base URL of the service."
+}
+
 variable "apprunner_role_arn" {
   type        = string
   description = "The name of the AppRunner role."
@@ -41,4 +46,14 @@ variable "microcms_service_domain" {
 variable "microcms_api_key" {
   type        = string
   description = "microcms api key."
+}
+
+variable "gtm_id" {
+  type        = string
+  description = "Google Tag Manager ID."
+}
+
+variable "ga_id" {
+  type        = string
+  description = "Google Analytics ID."
 }
