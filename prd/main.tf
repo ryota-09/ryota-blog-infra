@@ -48,3 +48,8 @@ resource "aws_apprunner_auto_scaling_configuration_version" "apprunner" {
   max_size        = 3
   min_size        = 1
 }
+
+resource "aws_apprunner_custom_domain_association" "apprunner_custom_domain" {
+  service_arn = aws_apprunner_service.apprunner.arn
+  domain_name = aws_acm_certificate.cert_prd.domain_name
+}
