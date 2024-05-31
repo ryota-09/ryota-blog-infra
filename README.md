@@ -67,3 +67,6 @@ You can customize these variables by creating a `terraform.tfvars` file
 ## Other
 ↓ This is frontend repository 
 https://github.com/ryota-09/ryota-blog
+
+↓ Web Page
+https://ryotablog.jp/blogs
