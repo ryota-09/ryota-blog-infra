@@ -34,13 +34,13 @@ variable "apprunner_role_arn" {
 }
 
 variable "image_uri" {
-  type = string
+  type        = string
   description = "value of the image uri"
 }
 
 variable "image_tag" {
   type    = string
-  default = "latest" 
+  default = "latest"
 }
 
 variable "microcms_service_domain" {
@@ -111,4 +111,14 @@ variable "gtm_id" {
 variable "ga_id" {
   type        = string
   description = "Google Analytics ID."
+}
+
+variable "guest_role_arn" {
+  type        = string
+  description = "The ARN of the guest role."
+}
+
+variable "identity_pool_id" {
+  type        = string
+  description = "The ID of the identity pool."
 }

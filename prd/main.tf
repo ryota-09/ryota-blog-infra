@@ -29,6 +29,8 @@ resource "aws_apprunner_service" "apprunner" {
           MICROCMS_API_KEY        = var.microcms_api_key
           NEXT_PUBLIC_GTM_ID      = var.gtm_id
           NEXT_PUBLIC_GA_ID       = var.ga_id
+          NEXT_PUBLIC_GUEST_ROLE_ARN = var.guest_role_arn
+          NEXT_PUBLIC_IDENTITY_POOL_ID = var.identity_pool_id
         }
       }
       image_identifier      = "${var.image_uri}:${var.image_tag}"
