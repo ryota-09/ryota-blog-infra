@@ -51,7 +51,7 @@ resource "awscc_iam_role" "infra_chatbot_role" {
       },
     ]
   })
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"]
+  # managed_policy_arns = ["arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"]
 }
 
 # Chatbot SNS トピックの定義

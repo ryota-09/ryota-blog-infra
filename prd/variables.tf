@@ -93,6 +93,16 @@ variable "dns_record_value" {
   description = "The value of the DNS record."
 }
 
+variable "story_record_name" {
+  type        = string
+  description = "The name of the DNS record."
+}
+
+variable "story_record_value" {
+  type        = string
+  description = "The value of the DNS record."
+}
+
 variable "slack_channel_id" {
   type        = string
   description = "The ID of the Slack channel."
@@ -121,4 +131,9 @@ variable "guest_role_arn" {
 variable "identity_pool_id" {
   type        = string
   description = "The ID of the identity pool."
+}
+
+variable "application_id" {
+  type        = string
+  description = "The ID of the application."
 }

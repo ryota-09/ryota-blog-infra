@@ -9,3 +9,7 @@ output "GUEST_ROLE_ARN" {
 output "IDENTITY_POOL_ID" {
   value = aws_cognito_identity_pool.id_pool.id
 }
+
+output "APPLICATION_ID" {
+  value = aws_rum_app_monitor.frontend_rum.app_monitor_id
+}

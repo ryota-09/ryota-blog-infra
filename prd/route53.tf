@@ -69,3 +69,12 @@ resource "aws_route53_record" "dns_a_record" {
 
   depends_on = [aws_apprunner_service.apprunner]
 }
+
+# NOTE: storybookのためのCNAMEレコード設定
+resource "aws_route53_record" "story_cname" {
+  name    = var.story_record_name
+  zone_id = aws_route53_zone.main_prd.zone_id
+  type    = "CNAME"
+  ttl     = 300
+  records = [var.story_record_value]
+}
