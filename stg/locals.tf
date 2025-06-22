@@ -78,3 +78,19 @@ locals {
 locals {
   ga_id = var.ga_id
 }
+
+locals {
+  guest_role_arn = var.guest_role_arn
+}
+
+locals {
+  identity_pool_id = var.identity_pool_id
+}
+
+locals {
+  application_id = var.application_id
+}
+
+locals {
+  cloudfront_secret_header_value = var.cloudfront_secret_header_value
+}

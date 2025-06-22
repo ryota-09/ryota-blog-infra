@@ -102,3 +102,24 @@ variable "ga_id" {
   type        = string
   description = "Google Analytics ID."
 }
+
+variable "guest_role_arn" {
+  type        = string
+  description = "The ARN of the guest role."
+}
+
+variable "identity_pool_id" {
+  type        = string
+  description = "The ID of the identity pool."
+}
+
+variable "application_id" {
+  type        = string
+  description = "The ID of the application."
+}
+
+variable "cloudfront_secret_header_value" {
+  type        = string
+  description = "Secret header value for CloudFront to App Runner communication."
+  sensitive   = true
+}
