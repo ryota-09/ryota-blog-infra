@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "cloudwatch_access" {
   statement {
     effect    = "Allow"
     resources = ["*"]
-    actions   = [
+    actions = [
       "cloudwatch:Describe*",
       "cloudwatch:Get*",
       "cloudwatch:List*",
@@ -40,11 +40,11 @@ resource "awscc_chatbot_slack_channel_configuration" "infra_chat_config" {
 resource "awscc_iam_role" "infra_chatbot_role" {
   role_name = "infra-chatbot-role-${var.env_name}"
   assume_role_policy_document = jsonencode({
-    Version   = "2012-10-17"
+    Version = "2012-10-17"
     Statement = [
       {
-        Action    = "sts:AssumeRole"
-        Effect    = "Allow"
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
         Principal = {
           Service = "chatbot.amazonaws.com"
         }

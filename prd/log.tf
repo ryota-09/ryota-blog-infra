@@ -58,8 +58,8 @@ resource "aws_cloudwatch_metric_alarm" "first_input_delay_alarm" {
 
 # RUM (Real User Monitoring) 
 resource "aws_rum_app_monitor" "frontend_rum" {
-  name           = "frontend-rum-${var.env_name}"
-  domain         = var.domain_name
+  name   = "frontend-rum-${var.env_name}"
+  domain = var.domain_name
   # cw_log_enabled = true
 
   app_monitor_configuration {

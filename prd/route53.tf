@@ -26,6 +26,27 @@ resource "aws_route53_record" "record_prd" {
   depends_on = [aws_acm_certificate.cert_prd, aws_route53_zone.main_prd]
 }
 
+# CloudFront用証明書の検証レコード
+resource "aws_route53_record" "record_cloudfront" {
+  for_each = {
+    # dvo : domain validation option
+    for dvo in aws_acm_certificate.cert_cloudfront.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      type   = dvo.resource_record_type
+      record = dvo.resource_record_value
+    }
+  }
+  allow_overwrite = true
+  name            = each.value.name
+  zone_id         = aws_route53_zone.main_prd.zone_id
+  type            = each.value.type
+  ttl             = 60
+
+  records = [each.value.record]
+
+  depends_on = [aws_acm_certificate.cert_cloudfront, aws_route53_zone.main_prd]
+}
+
 # 追加のCNAMEレコード設定
 resource "aws_route53_record" "cname_validation_a" {
   name    = var.cert_validation_record_name_a
@@ -61,13 +82,13 @@ resource "aws_route53_record" "dns_a_record" {
   type    = "A"
 
   alias {
-    name = var.dns_record_value
-    # NOTE: 参照 https://docs.aws.amazon.com/general/latest/gr/apprunner.html
-    zone_id                = "Z08491812XW6IPYLR6CCA"
+    name = aws_cloudfront_distribution.main.domain_name
+    # NOTE: CloudFront Distribution Zone ID
+    zone_id                = "Z2FDTNDATAQYW2"
     evaluate_target_health = false
   }
 
-  depends_on = [aws_apprunner_service.apprunner]
+  depends_on = [aws_cloudfront_distribution.main]
 }
 
 # NOTE: storybookのためのCNAMEレコード設定

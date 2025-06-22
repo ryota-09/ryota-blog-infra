@@ -137,3 +137,9 @@ variable "application_id" {
   type        = string
   description = "The ID of the application."
 }
+
+variable "cloudfront_secret_header_value" {
+  type        = string
+  description = "Secret header value for CloudFront to WAF communication"
+  sensitive   = true
+}

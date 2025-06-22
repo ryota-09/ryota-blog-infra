@@ -2,13 +2,47 @@ resource "aws_wafv2_web_acl" "frontend_acl" {
   name  = "frontend-acl-${var.env_name}"
   scope = "REGIONAL"
 
+  # デフォルトでブロック
   default_action {
-    allow {}
+    block {}
   }
 
+  # CloudFrontからのアクセスのみ許可
+  rule {
+    name     = "AllowCloudFrontOnly"
+    priority = 1
+
+    statement {
+      byte_match_statement {
+        search_string = var.cloudfront_secret_header_value
+        field_to_match {
+          single_header {
+            name = "x-cloudfront-secret"
+          }
+        }
+        text_transformation {
+          priority = 0
+          type     = "NONE"
+        }
+        positional_constraint = "EXACTLY"
+      }
+    }
+
+    action {
+      allow {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AllowCloudFrontOnly"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # AWS Managed Rules
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
-    priority = 1
+    priority = 2
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
@@ -21,7 +55,6 @@ resource "aws_wafv2_web_acl" "frontend_acl" {
       sampled_requests_enabled   = true
     }
 
-    # NOTE: invaliderror を防ぐため
     override_action {
       none {}
     }
