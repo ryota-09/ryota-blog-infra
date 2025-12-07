@@ -518,6 +518,20 @@ resource "aws_cloudfront_distribution" "main" {
     compress               = true
   }
 
+  # SSG/ISR JSONデータのキャッシュ（/_next/data/* にマッチ）
+  ordered_cache_behavior {
+    path_pattern     = "_next/data/*"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "AppRunnerOrigin"
+
+    cache_policy_id          = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_except_host.id
+
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+  }
+
   price_class = "PriceClass_200" # Use only North America, Europe, Asia, Middle East, and Africa edge locations
 
   restrictions {

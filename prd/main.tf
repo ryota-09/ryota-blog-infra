@@ -30,6 +30,7 @@ resource "aws_apprunner_service" "apprunner" {
         port = 3000
         runtime_environment_variables = {
           HOSTNAME                     = "0.0.0.0"
+          NODE_ENV                     = "production"
           NEXT_PUBLIC_BASE_URL         = var.base_url
           MICROCMS_SERVICE_DOMAIN      = var.microcms_service_domain
           MICROCMS_API_KEY             = var.microcms_api_key
@@ -228,6 +229,20 @@ resource "aws_cloudfront_distribution" "main" {
   # 静的アセットのキャッシュ
   ordered_cache_behavior {
     path_pattern     = "_next/static/*"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "AppRunnerOrigin"
+
+    cache_policy_id          = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_except_host.id
+
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+  }
+
+  # SSG/ISR JSONデータのキャッシュ（/_next/data/* にマッチ）
+  ordered_cache_behavior {
+    path_pattern     = "_next/data/*"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "AppRunnerOrigin"
