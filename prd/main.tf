@@ -254,7 +254,8 @@ resource "aws_cloudfront_distribution" "main" {
     compress               = true
   }
 
-  price_class = "PriceClass_200" # Use only North America, Europe, Asia, Middle East, and Africa edge locations
+  # コスト最適化: PriceClass_200 → PriceClass_100 (北米・欧州のみ、日本は引き続き東京エッジ使用)
+  price_class = "PriceClass_100"
 
   restrictions {
     geo_restriction {
