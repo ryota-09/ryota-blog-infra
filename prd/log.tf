@@ -7,7 +7,8 @@ resource "aws_cloudwatch_metric_alarm" "frontend_4xx_alarm" {
   namespace           = "AWS/AppRunner"
   period              = "60"
   statistic           = "Sum"
-  threshold           = "1"
+  # コスト最適化: 閾値を1→10に変更（ノイズ削減）
+  threshold           = "10"
   dimensions = {
     ServiceName = aws_apprunner_service.apprunner.service_name
     ServiceId   = aws_apprunner_service.apprunner.service_id
@@ -26,7 +27,8 @@ resource "aws_cloudwatch_metric_alarm" "frontend_5xx_alarm" {
   namespace           = "AWS/AppRunner"
   period              = "60"
   statistic           = "Sum"
-  threshold           = "1"
+  # コスト最適化: 閾値を1→10に変更（ノイズ削減）
+  threshold           = "10"
   dimensions = {
     ServiceName = aws_apprunner_service.apprunner.service_name
     ServiceId   = aws_apprunner_service.apprunner.service_id
@@ -66,7 +68,8 @@ resource "aws_rum_app_monitor" "frontend_rum" {
     allow_cookies       = true
     enable_xray         = false
     identity_pool_id    = aws_cognito_identity_pool.id_pool.id
-    session_sample_rate = 1
+    # コスト最適化: サンプリングレートを100%→10%に削減（RUMコスト約90%削減）
+    session_sample_rate = 0.1
     telemetries = [
       "errors",
       "http",
