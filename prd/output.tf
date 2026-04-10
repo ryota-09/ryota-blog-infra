@@ -1,25 +1,26 @@
-output "APPRUNNER_URL" {
-  value = aws_apprunner_service.apprunner.service_url
+# --- Route53 (ロールバック用) ---
+output "DOMAIN_NAME_SERVERS" {
+  description = "Route53 nameservers (ロールバック時に使用)"
+  value       = { for i, ns in aws_route53_zone.main_prd.name_servers : "nameserver_${i + 1}" => ns }
 }
 
-output "GUEST_ROLE_ARN" {
-  value = aws_iam_role.guest_role.arn
+# --- Cloudflare ---
+output "CLOUDFLARE_ZONE_ID" {
+  description = "Cloudflare Zone ID"
+  value       = cloudflare_zone.main.id
 }
 
-output "IDENTITY_POOL_ID" {
-  value = aws_cognito_identity_pool.id_pool.id
+output "CLOUDFLARE_ZONE_NS" {
+  description = "Cloudflare Zone nameservers (お名前.comで設定する)"
+  value       = cloudflare_zone.main.name_servers
 }
 
-output "APPLICATION_ID" {
-  value = aws_rum_app_monitor.frontend_rum.app_monitor_id
+output "R2_BUCKET_NAME" {
+  description = "R2 bucket name for ISR cache"
+  value       = cloudflare_r2_bucket.cache.name
 }
 
-output "CLOUDFRONT_DISTRIBUTION_DOMAIN" {
-  description = "CloudFront distribution domain name"
-  value       = aws_cloudfront_distribution.main.domain_name
-}
-
-output "CLOUDFRONT_DISTRIBUTION_ID" {
-  description = "CloudFront distribution ID"
-  value       = aws_cloudfront_distribution.main.id
+output "D1_DATABASE_ID" {
+  description = "D1 database ID (wrangler.jsonc の database_id に設定する)"
+  value       = cloudflare_d1_database.tags.id
 }

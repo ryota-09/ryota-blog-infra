@@ -1,15 +1,19 @@
-# output "GITHUB_ACTIONS_IAM_ROLE" {
-#   value = aws_iam_role.github_actions.arn
-# }
+output "CLOUDFLARE_ZONE_ID" {
+  description = "Cloudflare Zone ID"
+  value       = cloudflare_zone.main.id
+}
 
-# output "APPRUNNER_URL" {
-#   value = aws_apprunner_service.apprunner.service_url
-# }
+output "CLOUDFLARE_ZONE_NS" {
+  description = "Cloudflare Zone nameservers (レジストラで設定する)"
+  value       = cloudflare_zone.main.name_servers
+}
 
-# # output "CLOUDFRONT_DOMAIN_URL" {
-# #   value = aws_cloudfront_distribution.frontend_cdn.domain_name
-# # }
+output "R2_BUCKET_NAME" {
+  description = "R2 bucket name for ISR cache"
+  value       = cloudflare_r2_bucket.cache.name
+}
 
-# output "DOMAIN_NAME_SERVERS" {
-#   value = { for i, ns in aws_route53_zone.main.name_servers : "nameserver_${i + 1}" => ns }
-# }
+output "D1_DATABASE_ID" {
+  description = "D1 database ID (wrangler.jsonc の database_id に設定する)"
+  value       = cloudflare_d1_database.tags.id
+}
