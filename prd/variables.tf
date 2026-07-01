@@ -1,11 +1,6 @@
-variable "aws_region" {
-  type        = string
-  description = "AWS region"
-}
-
 variable "repo_org" {
   type        = string
-  description = "GitHub organization name"
+  description = "GitHub organization or user name."
 }
 
 variable "repo_name" {
@@ -23,123 +18,14 @@ variable "env_name" {
   description = "The deployment environment (e.g., stg, prd)."
 }
 
-variable "base_url" {
+# --- Cloudflare ---
+variable "cloudflare_api_token" {
   type        = string
-  description = "The base URL of the service."
-}
-
-variable "apprunner_role_arn" {
-  type        = string
-  description = "The name of the AppRunner role."
-}
-
-variable "image_uri" {
-  type        = string
-  description = "value of the image uri"
-}
-
-variable "image_tag" {
-  type    = string
-  default = "latest"
-}
-
-variable "microcms_service_domain" {
-  type        = string
-  description = "microcms service domain."
-}
-
-variable "microcms_api_key" {
-  type        = string
-  description = "microcms api key."
-}
-
-variable "cert_validation_record_name_a" {
-  type        = string
-  description = "The name of the DNS record for certificate validation."
-}
-
-variable "cert_validation_record_value_a" {
-  type        = string
-  description = "The value of the DNS record for certificate validation."
-}
-
-variable "cert_validation_record_name_b" {
-  type        = string
-  description = "The name of the DNS record for certificate validation."
-}
-
-variable "cert_validation_record_value_b" {
-  type        = string
-  description = "The value of the DNS record for certificate validation."
-}
-
-variable "cert_validation_record_name_c" {
-  type        = string
-  description = "The name of the DNS record for certificate validation."
-}
-
-variable "cert_validation_record_value_c" {
-  type        = string
-  description = "The value of the DNS record for certificate validation."
-}
-
-variable "dns_record_name" {
-  type        = string
-  description = "The name of the DNS record."
-}
-
-variable "dns_record_value" {
-  type        = string
-  description = "The value of the DNS record."
-}
-
-variable "story_record_name" {
-  type        = string
-  description = "The name of the DNS record."
-}
-
-variable "story_record_value" {
-  type        = string
-  description = "The value of the DNS record."
-}
-
-variable "slack_channel_id" {
-  type        = string
-  description = "The ID of the Slack channel."
-}
-
-variable "slack_workspace_id" {
-  type        = string
-  description = "The ID of the Slack workspace."
-}
-
-variable "gtm_id" {
-  type        = string
-  description = "Google Tag Manager ID."
-}
-
-variable "ga_id" {
-  type        = string
-  description = "Google Analytics ID."
-}
-
-variable "guest_role_arn" {
-  type        = string
-  description = "The ARN of the guest role."
-}
-
-variable "identity_pool_id" {
-  type        = string
-  description = "The ID of the identity pool."
-}
-
-variable "application_id" {
-  type        = string
-  description = "The ID of the application."
-}
-
-variable "cloudfront_secret_header_value" {
-  type        = string
-  description = "Secret header value for CloudFront to WAF communication"
+  description = "Cloudflare API token"
   sensitive   = true
+}
+
+variable "cloudflare_account_id" {
+  type        = string
+  description = "Cloudflare account ID"
 }

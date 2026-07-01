@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a Terraform infrastructure repository for managing AWS resources for the Ryota Blog application. The infrastructure supports both staging and production environments with separate state management.
+This is a Terraform infrastructure repository for managing Cloudflare and AWS resources for the Ryota Blog application. The application is a Next.js blog deployed on **Cloudflare Workers** using **OpenNext** (`@opennextjs/cloudflare`). Both staging and production environments are managed with separate Terraform state.
 
 ## Commands
 
@@ -14,7 +14,6 @@ cd stg
 terraform init
 terraform plan -var-file=stg.tfvars
 terraform apply -var-file=stg.tfvars
-terraform destroy -var-file=stg.tfvars  # when needed
 ```
 
 ### Production Environment
@@ -23,7 +22,6 @@ cd prd
 terraform init
 terraform plan -var-file=prd.tfvars
 terraform apply -var-file=prd.tfvars
-terraform destroy -var-file=prd.tfvars  # when needed
 ```
 
 ### Format and Validation
@@ -34,21 +32,25 @@ terraform validate
 
 ## Architecture
 
-The infrastructure manages a containerized Next.js blog application with the following key components:
+The infrastructure manages a Next.js blog application deployed on Cloudflare Workers via OpenNext:
 
-- **AWS App Runner**: Hosts the containerized Next.js application
-- **Amazon ECR**: Stores Docker container images
-- **Route 53**: DNS management and domain routing
-- **ACM**: SSL/TLS certificate management
-- **AWS WAF**: Web application security protection
-- **CloudWatch**: Logging and monitoring
+- **Cloudflare Workers**: Hosts the Next.js application (SSR/SSG/ISR via OpenNext)
+- **Cloudflare R2**: Incremental cache for ISR (bound as `NEXT_INC_CACHE_R2_BUCKET`)
+- **Cloudflare D1**: Tag cache for on-demand revalidation (bound as `NEXT_TAG_CACHE_D1`)
+- **Cloudflare DNS**: Domain management with automatic SSL
+- **Workers Custom Domain**: Routes custom domain to Workers
+- **AWS Route53**: Hosted zone retained for rollback capability (NS points to Cloudflare)
+
+Application deployment is handled by **Wrangler** via GitHub Actions (not managed by Terraform).
+
+### Migration Status
+
+The infrastructure was migrated from AWS App Runner + CloudFront + WAF to Cloudflare Workers. AWS resources are preserved in Terraform state via `removed` blocks with `lifecycle { destroy = false }` for rollback safety. After confirming stability, change to `destroy = true` to clean up.
 
 ## Environment Structure
 
-- **Staging (`stg/`)**: Development environment with ECR repository and GitHub Actions integration for CI/CD
-- **Production (`prd/`)**: Live environment with full App Runner service, custom domain, and certificate management
-
-The staging environment has most resources commented out and focuses on ECR management, while production runs the full application stack.
+- **Staging (`stg/`)**: Full Cloudflare stack (Zone, R2, D1, Workers Custom Domain)
+- **Production (`prd/`)**: Full Cloudflare stack + Route53 zone for rollback
 
 ## State Management
 
@@ -60,8 +62,13 @@ Each environment maintains separate Terraform state files to prevent conflicts b
 ## Variable Configuration
 
 Both environments use `.tfvars` files for environment-specific configuration. Key variables include:
+- Cloudflare API token and account ID
+- Domain and DNS configuration
 - MicroCMS API integration settings
 - Google Analytics and Tag Manager IDs
-- Domain and DNS configuration
-- GitHub repository settings for OIDC
-- RUM monitoring configuration
+- Slack channel/workspace IDs
+
+## Providers
+
+- **cloudflare/cloudflare** (~> 5.0): Manages Cloudflare resources (Zone, R2, D1, DNS, Workers Custom Domain)
+- **hashicorp/aws** (>= 4.9.0): Manages remaining AWS resources (Route53 zone, S3 state backend)
