@@ -1,17 +1,10 @@
-# --- Route53 (ロールバック用) ---
-output "DOMAIN_NAME_SERVERS" {
-  description = "Route53 nameservers (ロールバック時に使用)"
-  value       = { for i, ns in aws_route53_zone.main_prd.name_servers : "nameserver_${i + 1}" => ns }
-}
-
-# --- Cloudflare ---
 output "CLOUDFLARE_ZONE_ID" {
   description = "Cloudflare Zone ID"
   value       = cloudflare_zone.main.id
 }
 
 output "CLOUDFLARE_ZONE_NS" {
-  description = "Cloudflare Zone nameservers (お名前.comで設定する)"
+  description = "Cloudflare Zone nameservers"
   value       = cloudflare_zone.main.name_servers
 }
 

@@ -1,6 +1,6 @@
-variable "aws_region" {
+variable "repo_org" {
   type        = string
-  description = "AWS region"
+  description = "GitHub organization or user name."
 }
 
 variable "repo_name" {
@@ -16,18 +16,6 @@ variable "domain_name" {
 variable "env_name" {
   type        = string
   description = "The deployment environment (e.g., stg, prd)."
-}
-
-variable "story_record_name" {
-  type        = string
-  description = "The name of the Storybook DNS record."
-  default     = "storybook"
-}
-
-variable "story_record_value" {
-  type        = string
-  description = "The value of the Storybook DNS record."
-  default     = ""
 }
 
 # --- Cloudflare ---

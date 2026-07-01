@@ -25,13 +25,14 @@ resource "cloudflare_d1_database" "tags" {
 
 # --- Workers Custom Domain ---
 # DNS レコードと SSL 証明書を自動管理する
-resource "cloudflare_workers_custom_domain" "main" {
-  account_id  = var.cloudflare_account_id
-  zone_id     = cloudflare_zone.main.id
-  hostname    = var.domain_name
-  service     = "${var.repo_name}-${var.env_name}"
-  environment = "production"
-}
+# 注意: Worker のデプロイ後にコメントを解除して apply すること
+# resource "cloudflare_workers_domain" "main" {
+#   account_id  = var.cloudflare_account_id
+#   zone_id     = cloudflare_zone.main.id
+#   hostname    = var.domain_name
+#   service     = "${var.repo_name}-${var.env_name}"
+#   environment = "production"
+# }
 
 # --- Storybook サブドメイン ---
 resource "cloudflare_record" "storybook" {

@@ -1,8 +1,3 @@
-variable "aws_region" {
-  type        = string
-  description = "AWS region"
-}
-
 variable "repo_name" {
   type        = string
   description = "The name of the repository."
